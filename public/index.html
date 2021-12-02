@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <script 
+      type="text/javascript"
+      src="https://app.sandbox.midtrans.com/snap/snap.js"
+      data-client-key="XXXXXXXXXXXXXXXXXX"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+
+  <body>
+   <div>
+     <div>
+      <label for="">Order ID</label>: <input type="text" id="order-id" required >
+     </div>
+     <br>
+     <div>
+      <label for="">Total Payment</label>: <input type="number" id="total-payment" required>
+     </div>
+     <br>
+    <button id="pay-button">Pay!</button>
+   </div>
+
+    <script type="text/javascript">
+      const orderID = document.getElementById('order-id');
+      const totalPayment = document.getElementById('total-payment');
+      const payButton = document.getElementById('pay-button');
+      
+      payButton.addEventListener('click', async function () {
+        const transaction = await axios.post('/pay', {order_id: orderID.value, gross_amount: totalPayment.value}, {headers: {'Content-Type': 'application/json'}})
+        if(transaction.status === 200){
+          const {token} =  transaction.data
+          snap.pay(token); // Replace it with your transaction token
+        }else{
+          alert('Failed to make pay..')
+        }
+      });
+    </script>
+  </body>
+</html>
